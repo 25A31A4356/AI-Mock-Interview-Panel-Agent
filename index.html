@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Mock Interview Panel Agent // Enterprise HRTech Simulation</title>
+  <meta name="description" content="Spacious, calm enterprise HRTech simulator with multi-persona interviewing, real-time adaptive follow-ups, live coding workspace, and automated STAR assessment scoring.">
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            slate: {
+              750: '#293548',
+              850: '#141d2e',
+              900: '#0b1120',
+              950: '#0a0f1d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0f1d;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    /* Print Stylesheet for PDF Export */
+    @media print {
+      @page {
+        size: portrait;
+        margin: 12mm 10mm 12mm 10mm;
+      }
+      *, *::before, *::after {
+        background-color: transparent !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 10pt !important;
+      }
+      header,
+      #setup-stage,
+      #studio-stage,
+      #action-bar-print,
+      button,
+      .no-print {
+        display: none !important;
+      }
+      #scorecard-stage {
+        display: block !important;
+      }
+      .scorecard-card {
+        border: 1px solid #94a3b8 !important;
+        background: #ffffff !important;
+        break-inside: avoid;
+        margin-bottom: 14px !important;
+      }
+      .scorecard-badge {
+        border: 1px solid #475569 !important;
+        color: #0f172a !important;
+      }
+    }
+
+    /* Subtle pulsing audio visualizer bars */
+    @keyframes soundWave {
+      0%, 100% { height: 4px; }
+      50% { height: 18px; }
+    }
+    .wave-bar-1 { animation: soundWave 0.8s ease-in-out infinite; }
+    .wave-bar-2 { animation: soundWave 0.6s ease-in-out infinite 0.15s; }
+    .wave-bar-3 { animation: soundWave 0.9s ease-in-out infinite 0.3s; }
+    .wave-bar-4 { animation: soundWave 0.7s ease-in-out infinite 0.45s; }
+    .wave-bar-5 { animation: soundWave 0.85s ease-in-out infinite 0.2s; }
+  </style>
+</head>
+<body class="bg-[#0a0f1d] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP ENTERPRISE NAVIGATION HEADER                                       -->
+  <!-- ========================================================================= -->
+  <header class="border-b border-[#1e293b] bg-[#0a0f1d]/90 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-[1540px] mx-auto px-6 sm:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3.5">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 p-0.5 shadow-lg shadow-indigo-950/40 flex items-center justify-center">
+          <div class="h-full w-full bg-[#0a0f1d] rounded-[10px] flex items-center justify-center">
+            <i data-lucide="users-2" class="w-5 h-5 text-indigo-400"></i>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-base font-bold text-white tracking-tight">InterviewStudio</h1>
+            <span class="text-xs font-mono text-slate-600">//</span>
+            <span class="text-xs font-mono text-indigo-400 font-semibold tracking-wide">AI Mock Panel Agent</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-indigo-950/80 text-indigo-300 border border-indigo-700/60 font-semibold">
+              v3.0 Enterprise
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Calm, High-Signal HRTech Simulator &bull; Multi-Interviewer Panel &bull; STAR Diagnostic Scorecard
+          </p>
+        </div>
+      </div>
+
+      <!-- Stage Step Indicator & Action Controls -->
+      <div class="flex items-center flex-wrap gap-4 text-xs font-mono">
+        <div class="flex items-center gap-1.5 p-1 rounded-xl bg-slate-900 border border-[#1e293b]">
+          <span id="step-pill-1" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-bold transition-all duration-200">
+            1. Configuration
+          </span>
+          <span class="text-slate-600">&bull;</span>
+          <span id="step-pill-2" class="px-3 py-1.5 rounded-lg text-slate-400 font-medium transition-all duration-200">
+            2. Live Studio
+          </span>
+          <span class="text-slate-600">&bull;</span>
+          <span id="step-pill-3" class="px-3 py-1.5 rounded-lg text-slate-400 font-medium transition-all duration-200">
+            3. Scorecard
+          </span>
+        </div>
+
+        <!-- Quick Reset CTA -->
+        <button onclick="resetToSetup()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-[#1e293b] text-slate-300 hover:text-white font-semibold transition cursor-pointer flex items-center gap-1.5" title="Restart simulation from scratch">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span>Restart</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN APPLICATION STAGES WRAPPER                                           -->
+  <!-- ========================================================================= -->
+  <main class="max-w-[1540px] mx-auto w-full px-6 sm:px-8 py-8 flex-1">
+
+    <!-- ======================================================================= -->
+    <!-- STAGE 1: CONFIGURATION & SETUP WORKSPACE                                -->
+    <!-- ======================================================================= -->
+    <div id="setup-stage" class="space-y-8 max-w-4xl mx-auto">
+      
+      <!-- Welcome Hero Banner -->
+      <div class="p-8 rounded-2xl border border-[#1e293b] bg-slate-900/50 space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/70 border border-indigo-700/60 text-indigo-300 font-mono text-xs font-semibold">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Simulated Multi-Persona Technical &amp; Executive Loop</span>
+        </div>
+        <h2 class="text-2xl font-bold text-white tracking-tight">Configure Your Mock Interview Loop</h2>
+        <p class="text-sm text-slate-400 leading-relaxed max-w-2xl">
+          Step into a realistic interview room with an autonomous panel consisting of a <strong>VP of Engineering</strong>, a <strong>Staff Systems Architect</strong>, and a <strong>Bar Raiser</strong>. Tailor the seniority level, target role, and focus area.
+        </p>
+      </div>
+
+      <!-- Configuration Form Grid -->
+      <div class="p-8 rounded-2xl border border-[#1e293b] bg-slate-900/30 space-y-8">
+        
+        <!-- Candidate Identity -->
+        <div class="space-y-3">
+          <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+            Candidate Full Name
+          </label>
+          <div class="relative">
+            <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-4 top-3.5"></i>
+            <input type="text" id="cfg-candidate-name" value="Alex Morgan" class="w-full pl-11 pr-4 py-3 bg-[#0a0f1d] border border-[#1e293b] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-sans" placeholder="e.g. Alex Morgan">
+          </div>
+        </div>
+
+        <!-- Role Presets -->
+        <div class="space-y-3">
+          <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+            Target Job Role
+          </label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="role-selector-grid">
+            <button type="button" onclick="selectRolePreset('frontend')" class="role-preset-btn p-4 rounded-xl border border-indigo-600 bg-indigo-950/30 text-left transition cursor-pointer">
+              <div class="font-bold text-white text-sm">Frontend Engineer</div>
+              <div class="text-[11px] text-slate-400 mt-1">React, Web Vitals, Performance</div>
+            </button>
+            <button type="button" onclick="selectRolePreset('backend')" class="role-preset-btn p-4 rounded-xl border border-[#1e293b] bg-slate-900 text-left hover:border-slate-700 transition cursor-pointer">
+              <div class="font-bold text-white text-sm">Backend / Distributed</div>
+              <div class="text-[11px] text-slate-400 mt-1">Kafka, Redis, SQL, Scalability</div>
+            </button>
+            <button type="button" onclick="selectRolePreset('fullstack')" class="role-preset-btn p-4 rounded-xl border border-[#1e293b] bg-slate-900 text-left hover:border-slate-700 transition cursor-pointer">
+              <div class="font-bold text-white text-sm">Full-Stack Engineer</div>
+              <div class="text-[11px] text-slate-400 mt-1">APIs, Systems, Client &amp; Cloud</div>
+            </button>
+            <button type="button" onclick="selectRolePreset('aiml')" class="role-preset-btn p-4 rounded-xl border border-[#1e293b] bg-slate-900 text-left hover:border-slate-700 transition cursor-pointer">
+              <div class="font-bold text-white text-sm">AI / ML Engineer</div>
+              <div class="text-[11px] text-slate-400 mt-1">LLMs, Vector DBs, RAG, PyTorch</div>
+            </button>
+            <button type="button" onclick="selectRolePreset('pm')" class="role-preset-btn p-4 rounded-xl border border-[#1e293b] bg-slate-900 text-left hover:border-slate-700 transition cursor-pointer">
+              <div class="font-bold text-white text-sm">Product Manager</div>
+              <div class="text-[11px] text-slate-400 mt-1">Strategy, Metrics, Prioritization</div>
+            </button>
+            <button type="button" onclick="selectRolePreset('custom')" class="role-preset-btn p-4 rounded-xl border border-[#1e293b] bg-slate-900 text-left hover:border-slate-700 transition cursor-pointer">
+              <div class="font-bold text-white text-sm">Custom Role</div>
+              <div class="text-[11px] text-slate-400 mt-1">Specify custom job title</div>
+            </button>
+          </div>
+          <input type="text" id="cfg-custom-role" class="w-full px-4 py-3 bg-[#0a0f1d] border border-[#1e293b] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-sans hidden" placeholder="Enter custom target role (e.g. Staff DevOps Architect)">
+        </div>
+
+        <!-- Seniority Level & Interview Focus Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Seniority Selector -->
+          <div class="space-y-3">
+            <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+              Seniority Level
+            </label>
+            <div class="grid grid-cols-3 gap-2 font-mono text-xs" id="seniority-grid">
+              <button type="button" onclick="selectSeniority('Junior (0-2 yrs)')" class="seniority-btn py-3 px-2 rounded-xl border border-[#1e293b] bg-slate-900 hover:border-slate-700 text-center font-bold text-slate-300 transition cursor-pointer">
+                Junior<br><span class="text-[10px] font-normal text-slate-500">0-2 yrs</span>
+              </button>
+              <button type="button" onclick="selectSeniority('Mid-Level (3-5 yrs)')" class="seniority-btn py-3 px-2 rounded-xl border border-indigo-600 bg-indigo-950/30 text-center font-bold text-white transition cursor-pointer">
+                Mid-Level<br><span class="text-[10px] font-normal text-slate-400">3-5 yrs</span>
+              </button>
+              <button type="button" onclick="selectSeniority('Senior / Lead (6+ yrs)')" class="seniority-btn py-3 px-2 rounded-xl border border-[#1e293b] bg-slate-900 hover:border-slate-700 text-center font-bold text-slate-300 transition cursor-pointer">
+                Senior / Lead<br><span class="text-[10px] font-normal text-slate-500">6+ yrs</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interview Focus -->
+          <div class="space-y-3">
+            <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+              Evaluation Focus
+            </label>
+            <div class="grid grid-cols-3 gap-2 font-mono text-xs" id="focus-grid">
+              <button type="button" onclick="selectFocus('Behavioral (STAR)')" class="focus-btn py-3 px-2 rounded-xl border border-[#1e293b] bg-slate-900 hover:border-slate-700 text-center font-bold text-slate-300 transition cursor-pointer">
+                Behavioral<br><span class="text-[10px] font-normal text-slate-500">STAR Method</span>
+              </button>
+              <button type="button" onclick="selectFocus('Technical & Architecture')" class="focus-btn py-3 px-2 rounded-xl border border-[#1e293b] bg-slate-900 hover:border-slate-700 text-center font-bold text-slate-300 transition cursor-pointer">
+                Technical<br><span class="text-[10px] font-normal text-slate-500">System Design</span>
+              </button>
+              <button type="button" onclick="selectFocus('Comprehensive Panel')" class="focus-btn py-3 px-2 rounded-xl border border-indigo-600 bg-indigo-950/30 text-center font-bold text-white transition cursor-pointer">
+                Full Loop<br><span class="text-[10px] font-normal text-slate-400">Multi-Panel</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Speech & Voice Synthesis Options -->
+        <div class="p-5 rounded-xl border border-[#1e293b] bg-[#0a0f1d] flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-xl bg-slate-900 border border-[#1e293b] flex items-center justify-center text-indigo-400">
+              <i data-lucide="mic" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-bold text-white text-sm">Voice Synthesis &amp; Dictation (Speech API)</div>
+              <p class="text-xs text-slate-400">Enable panel spoken voice output (TTS) and speech-to-text input (STT)</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-6 text-xs font-mono">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="cfg-tts-enabled" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-900 border-slate-700 focus:ring-0">
+              <span class="text-slate-300">Spoken Questions (TTS)</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="cfg-stt-enabled" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-900 border-slate-700 focus:ring-0">
+              <span class="text-slate-300">Microphone Input (STT)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Target Job Description & Resume Area -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+              Contextual Tailoring: Job Description &amp; Candidate Highlights
+            </label>
+            <button type="button" onclick="loadSampleContext()" class="text-xs font-mono text-indigo-400 hover:text-indigo-300 hover:underline cursor-pointer">
+              Load Sample Senior Backend Context
+            </button>
+          </div>
+          <textarea id="cfg-context" rows="4" class="w-full p-4 bg-[#0a0f1d] border border-[#1e293b] rounded-xl text-xs text-slate-300 font-mono leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Optional: Paste job description snippets, tech stack requirements, or resume bullet points to guide the panel's adaptive follow-ups..."></textarea>
+        </div>
+
+        <!-- Primary CTA Button -->
+        <div class="pt-4 border-t border-[#1e293b] flex items-center justify-between">
+          <div class="text-xs font-mono text-slate-500 flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+            <span>3 Panelists Assembled &bull; Latency &lt; 20ms &bull; Zero Server Dependencies</span>
+          </div>
+
+          <button onclick="startInterviewStudio()" class="px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm flex items-center gap-2 transition duration-200 shadow-xl shadow-indigo-600/30 cursor-pointer min-h-[50px]">
+            <span>Initialize Interview Studio</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- STAGE 2: LIVE MULTI-PERSONA INTERVIEW STUDIO                            -->
+    <!-- ======================================================================= -->
+    <div id="studio-stage" class="space-y-6 hidden">
+      
+      <!-- Studio Header Bar -->
+      <div class="p-6 rounded-2xl border border-[#1e293b] bg-slate-900/60 flex flex-wrap items-center justify-between gap-6 shadow-sm">
+        <div class="flex items-center gap-4">
+          <div class="h-12 w-12 rounded-2xl bg-indigo-950 border border-indigo-700/80 flex items-center justify-center text-indigo-400 font-bold font-mono text-sm">
+            LIVE
+          </div>
+          <div>
+            <div class="flex items-center gap-2.5">
+              <h2 id="studio-role-title" class="text-base font-bold text-white tracking-tight">Backend &amp; Distributed Systems</h2>
+              <span id="studio-level-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
+                Senior / Lead (6+ yrs)
+              </span>
+              <span class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-700 font-semibold">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Active Recording
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">
+              Candidate: <strong id="studio-candidate-name" class="text-slate-200">Alex Morgan</strong> &bull; Focus: <span id="studio-focus-text" class="text-slate-300 font-mono">Comprehensive Multi-Panel</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 text-xs font-mono">
+          <!-- Live Timer -->
+          <div class="px-4 py-2 rounded-xl bg-[#0a0f1d] border border-[#1e293b] text-center">
+            <span class="text-slate-500 block text-[10px] uppercase">Session Elapsed</span>
+            <span id="studio-timer" class="text-sm font-bold text-slate-200">00:00</span>
+          </div>
+
+          <!-- Conclude CTA -->
+          <button onclick="concludeAndScore()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs flex items-center gap-2 transition duration-200 shadow-md shadow-rose-950 cursor-pointer min-h-[44px]">
+            <i data-lucide="check-square" class="w-4 h-4"></i>
+            <span>Conclude &amp; Generate Scorecard</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Multi-Interviewer Persona Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="panelist-cards-grid">
+        
+        <!-- Panelist 1: Sarah Lin -->
+        <div id="card-panelist-sarah" class="panelist-card p-5 rounded-2xl border border-[#1e293b] bg-slate-900/40 space-y-3 transition-all duration-300">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-bold text-white font-mono text-sm">
+                SL
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white">Sarah Lin</h4>
+                <p class="text-[11px] text-slate-400">VP of Engineering &bull; Architecture</p>
+              </div>
+            </div>
+            <span id="badge-speaker-sarah" class="speaker-badge px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700">
+              Listening
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Evaluates high-level system boundaries, trade-off depth, organizational leadership, and executive communication.
+          </p>
+        </div>
+
+        <!-- Panelist 2: Marcus Vance -->
+        <div id="card-panelist-marcus" class="panelist-card p-5 rounded-2xl border border-[#1e293b] bg-slate-900/40 space-y-3 transition-all duration-300">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 flex items-center justify-center font-bold text-white font-mono text-sm">
+                MV
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white">Marcus Vance</h4>
+                <p class="text-[11px] text-slate-400">Staff Systems Architect &bull; Tech Lead</p>
+              </div>
+            </div>
+            <span id="badge-speaker-marcus" class="speaker-badge px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700">
+              Listening
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Drills into concurrency, database indexing, caching failure modes, distributed locking, and edge-case resiliency.
+          </p>
+        </div>
+
+        <!-- Panelist 3: Elena Rostova -->
+        <div id="card-panelist-elena" class="panelist-card p-5 rounded-2xl border border-[#1e293b] bg-slate-900/40 space-y-3 transition-all duration-300">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center font-bold text-white font-mono text-sm">
+                ER
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white">Elena Rostova</h4>
+                <p class="text-[11px] text-slate-400">Head of People &bull; Bar Raiser</p>
+              </div>
+            </div>
+            <span id="badge-speaker-elena" class="speaker-badge px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700">
+              Listening
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Strictly probes behavioral STAR mechanics, conflict resolution, ownership, bias for action, and team culture add.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Studio Main Workspace: Split Transcript & Coding Editor -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Column: Conversational Stream (7 cols on lg) -->
+        <div class="lg:col-span-7 flex flex-col h-[640px] rounded-2xl border border-[#1e293b] bg-slate-900/40 overflow-hidden shadow-sm">
+          
+          <!-- Stream Header -->
+          <div class="px-6 py-3.5 border-b border-[#1e293b] bg-[#0a0f1d]/70 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="message-square" class="w-4 h-4 text-indigo-400"></i>
+              <span class="text-xs font-bold text-white">Live Panel Dialogue &amp; Follow-up Stream</span>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-[11px] text-slate-400">
+              <span id="exchange-counter">Round 1 &bull; Exchange 1/6</span>
+            </div>
+          </div>
+
+          <!-- Transcript Scrollable Feed -->
+          <div id="dialogue-feed" class="flex-1 p-6 space-y-4 overflow-y-auto">
+            <!-- Dynamically populated with chat cards -->
+          </div>
+
+          <!-- Candidate Input Section -->
+          <div class="p-4 border-t border-[#1e293b] bg-[#0a0f1d] space-y-3">
+            
+            <!-- Quick Suggestion Action Chips -->
+            <div class="flex items-center gap-2 overflow-x-auto text-[11px] font-mono text-slate-400 pb-1">
+              <span class="text-slate-500 uppercase text-[10px]">Prompt Aids:</span>
+              <button onclick="insertQuickPrompt('star')" class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer shrink-0">
+                + STAR Framework Template
+              </button>
+              <button onclick="insertQuickPrompt('tradeoff')" class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer shrink-0">
+                + Mention Latency vs Throughput
+              </button>
+              <button onclick="insertQuickPrompt('metric')" class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer shrink-0">
+                + Add Business Metric Impact
+              </button>
+            </div>
+
+            <!-- Text Input & Voice Controls -->
+            <div class="relative">
+              <textarea id="candidate-response-input" rows="3" class="w-full p-3.5 bg-slate-900 border border-[#1e293b] rounded-xl text-xs text-slate-200 font-sans leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-28 resize-none" placeholder="Articulate your response (Use STAR method or explain technical trade-offs). Press Ctrl+Enter to submit..."></textarea>
+              
+              <!-- Floating Buttons Inside Textarea -->
+              <div class="absolute right-2.5 bottom-2.5 flex items-center gap-2">
+                
+                <!-- Voice Mic Push-to-Talk Button -->
+                <button id="btn-mic-toggle" onclick="toggleSpeechRecording()" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer" title="Speak Answer (Microphone Dictation)">
+                  <i data-lucide="mic" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Submit Button -->
+                <button onclick="submitCandidateResponse()" class="px-3.5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center gap-1.5 transition shadow-sm cursor-pointer">
+                  <span>Send</span>
+                  <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Voice Dictation Status Bar -->
+            <div id="voice-indicator-bar" class="hidden items-center justify-between px-3 py-1.5 rounded-lg bg-indigo-950/60 border border-indigo-700/60 text-xs font-mono text-indigo-300">
+              <div class="flex items-center gap-2">
+                <span class="flex h-2 w-2 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                </span>
+                <span>Listening for speech... Click mic to stop.</span>
+              </div>
+              <div class="flex items-center gap-1 h-4">
+                <span class="w-1 bg-indigo-400 wave-bar-1 rounded-full"></span>
+                <span class="w-1 bg-indigo-400 wave-bar-2 rounded-full"></span>
+                <span class="w-1 bg-indigo-400 wave-bar-3 rounded-full"></span>
+                <span class="w-1 bg-indigo-400 wave-bar-4 rounded-full"></span>
+                <span class="w-1 bg-indigo-400 wave-bar-5 rounded-full"></span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right Column: Embedded Technical Code Workspace (5 cols on lg) -->
+        <div class="lg:col-span-5 flex flex-col h-[640px] rounded-2xl border border-[#1e293b] bg-slate-900/40 overflow-hidden shadow-sm">
+          
+          <!-- Code Header -->
+          <div class="px-5 py-3 border-b border-[#1e293b] bg-[#0a0f1d]/70 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="code-2" class="w-4 h-4 text-emerald-400"></i>
+              <span class="text-xs font-bold text-white">Live Code &amp; Design Sandbox</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <!-- Language Selector -->
+              <select id="code-language" onchange="changeCodeLanguage(this.value)" class="bg-slate-900 border border-[#1e293b] text-slate-300 text-[11px] font-mono rounded-lg px-2.5 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer">
+                <option value="javascript">JavaScript (ES6)</option>
+                <option value="python" selected>Python 3</option>
+                <option value="java">Java 17</option>
+                <option value="sql">PostgreSQL</option>
+              </select>
+
+              <!-- Run Code Button -->
+              <button onclick="executeCodeSnippet()" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-semibold flex items-center gap-1 transition shadow-sm cursor-pointer">
+                <i data-lucide="play" class="w-3 h-3 fill-current"></i>
+                <span>Run</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Code Editor Area -->
+          <div class="flex-1 bg-[#0a0f1d] flex flex-col p-3 font-mono text-xs overflow-hidden">
+            <div class="text-[10px] text-slate-500 pb-1 flex justify-between border-b border-[#1e293b]">
+              <span id="code-task-name">Technical Task: LRU Cache Implementation</span>
+              <span>UTF-8 &bull; Strict Linting</span>
+            </div>
+            <textarea id="live-code-editor" class="flex-1 w-full bg-transparent text-emerald-300 font-mono text-xs p-2 leading-relaxed focus:outline-none resize-none" spellcheck="false"></textarea>
+          </div>
+
+          <!-- Execution Terminal Output -->
+          <div class="h-44 border-t border-[#1e293b] bg-[#070b14] p-3 flex flex-col font-mono text-xs">
+            <div class="flex items-center justify-between pb-1 mb-1 border-b border-slate-800 text-[10px] text-slate-500">
+              <span class="flex items-center gap-1.5">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                <span>Runtime Execution Terminal</span>
+              </span>
+              <button onclick="attachCodeToAnswer()" class="text-indigo-400 hover:text-indigo-300 hover:underline cursor-pointer">
+                Attach Code to Response &uarr;
+              </button>
+            </div>
+            <pre id="code-terminal" class="flex-1 overflow-y-auto text-[11px] text-slate-300 leading-normal">
+Click [Run] to execute your test harness and verify edge cases...
+            </pre>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- STAGE 3: POST-INTERVIEW DIAGNOSTIC SCORECARD                            -->
+    <!-- ======================================================================= -->
+    <div id="scorecard-stage" class="space-y-8 max-w-5xl mx-auto hidden">
+      
+      <!-- Top Action Bar for Scorecard -->
+      <div id="action-bar-print" class="p-6 rounded-2xl border border-[#1e293b] bg-slate-900/60 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-xl bg-emerald-950 border border-emerald-700/80 flex items-center justify-center text-emerald-400">
+            <i data-lucide="file-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white tracking-tight">Executive Assessment Scorecard Ready</h3>
+            <p class="text-xs text-slate-400">Evaluated across STAR Framework, Architecture Rigor, and People Alignment</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="window.print()" class="px-4 py-2.5 rounded-xl bg-slate-850 hover:bg-slate-800 border border-[#1e293b] text-slate-200 hover:text-white font-semibold text-xs flex items-center gap-2 transition cursor-pointer">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>Export PDF / Print Assessment</span>
+          </button>
+          
+          <button onclick="resetToSetup()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center gap-2 transition shadow-md shadow-indigo-600/30 cursor-pointer">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            <span>Start New Mock Session</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Document Header (Appears in Print & Screen) -->
+      <div class="scorecard-card p-8 rounded-2xl border border-[#1e293b] bg-slate-900/40 space-y-6">
+        
+        <div class="flex flex-wrap items-start justify-between gap-4 border-b border-[#1e293b] pb-6">
+          <div>
+            <span class="text-[11px] font-mono uppercase tracking-wider text-slate-500">Official Candidate Evaluation Record</span>
+            <h2 id="sc-candidate-name" class="text-2xl font-bold text-white tracking-tight mt-1">Alex Morgan</h2>
+            <div class="flex flex-wrap items-center gap-2 mt-2 font-mono text-xs text-slate-400">
+              <span id="sc-role-badge" class="px-2.5 py-0.5 rounded-md bg-slate-800 text-indigo-300 border border-slate-700">Backend / Distributed Systems</span>
+              <span id="sc-seniority-badge" class="px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">Senior / Lead (6+ yrs)</span>
+              <span>&bull;</span>
+              <span id="sc-date-text">Oct 3, 2026</span>
+            </div>
+          </div>
+
+          <!-- Overall Recommendation Chip -->
+          <div class="text-right">
+            <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-1">Panel Consensus Recommendation</span>
+            <div id="sc-recommendation-pill" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-950 border border-emerald-600 text-emerald-300 font-bold text-sm font-mono shadow-sm">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              <span>Strong Hire (88/100)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Dimension STAR Framework Breakdown Cards -->
+        <div>
+          <h4 class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold mb-4">
+            STAR Method Dimensional Ratings
+          </h4>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <!-- Situation & Task -->
+            <div class="p-5 rounded-xl border border-[#1e293b] bg-[#0a0f1d] space-y-2">
+              <div class="flex items-center justify-between font-mono">
+                <span class="text-xs text-slate-400 font-bold">1. Situation &amp; Task</span>
+                <span id="sc-score-st" class="text-sm font-bold text-indigo-400">9.0 / 10</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed font-sans">
+                Problem framing was crisp. Grounded ambiguous requirements into precise constraints, scale limits, and latency targets.
+              </p>
+            </div>
+
+            <!-- Action -->
+            <div class="p-5 rounded-xl border border-[#1e293b] bg-[#0a0f1d] space-y-2">
+              <div class="flex items-center justify-between font-mono">
+                <span class="text-xs text-slate-400 font-bold">2. Action &amp; Execution</span>
+                <span id="sc-score-action" class="text-sm font-bold text-emerald-400">8.5 / 10</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed font-sans">
+                Demonstrated strong ownership. Selected pragmatic architectures (Redis read-through, write-ahead logs) while articulating tradeoff costs.
+              </p>
+            </div>
+
+            <!-- Result -->
+            <div class="p-5 rounded-xl border border-[#1e293b] bg-[#0a0f1d] space-y-2">
+              <div class="flex items-center justify-between font-mono">
+                <span class="text-xs text-slate-400 font-bold">3. Result &amp; Impact</span>
+                <span id="sc-score-result" class="text-sm font-bold text-cyan-400">8.2 / 10</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed font-sans">
+                Emphasized quantifiable metrics (p99 latency drop, SLA uptime). Shared transparent post-mortem learnings and failure mitigations.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Competency Metric Radars / Progress Bars -->
+        <div class="space-y-4 pt-2">
+          <h4 class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+            Competency Matrix &amp; Skill Gauges
+          </h4>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <div class="p-4 rounded-xl border border-[#1e293b] bg-[#0a0f1d] space-y-2 font-mono text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Technical Accuracy &amp; Depth</span>
+                <span id="bar-val-tech" class="text-white font-bold">90%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-700">
+                <div id="bar-fill-tech" class="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-500" style="width: 90%"></div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl border border-[#1e293b] bg-[#0a0f1d] space-y-2 font-mono text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Communication &amp; Articulation</span>
+                <span id="bar-val-comm" class="text-white font-bold">86%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-700">
+                <div id="bar-fill-comm" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style="width: 86%"></div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl border border-[#1e293b] bg-[#0a0f1d] space-y-2 font-mono text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Problem Solving Under Pressure</span>
+                <span id="bar-val-ps" class="text-white font-bold">88%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-700">
+                <div id="bar-fill-ps" class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500" style="width: 88%"></div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl border border-[#1e293b] bg-[#0a0f1d] space-y-2 font-mono text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">System Scalability &amp; Failure Modes</span>
+                <span id="bar-val-scale" class="text-white font-bold">84%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-700">
+                <div id="bar-fill-scale" class="h-full bg-gradient-to-r from-amber-500 to-rose-500 rounded-full transition-all duration-500" style="width: 84%"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Actionable Feedback: Strengths, Gaps & Model Answers -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          
+          <!-- Key Strengths -->
+          <div class="p-6 rounded-xl border border-emerald-900/60 bg-emerald-950/20 space-y-3">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase font-mono tracking-wider">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              <span>Key Strengths Identified</span>
+            </div>
+            <ul id="sc-strengths-list" class="space-y-2 text-xs text-slate-300 list-disc list-inside leading-relaxed">
+              <li>Strong architectural instincts when discussing caching invalidation strategies.</li>
+              <li>Natural conversational pace; answered clarifying questions before jumping to solutioning.</li>
+              <li>Used concrete engineering trade-off terminology (CAP theorem, write amplification).</li>
+            </ul>
+          </div>
+
+          <!-- Critical Gaps / Growth Areas -->
+          <div class="p-6 rounded-xl border border-amber-900/60 bg-amber-950/20 space-y-3">
+            <div class="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase font-mono tracking-wider">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+              <span>Growth Areas &amp; Blind Spots</span>
+            </div>
+            <ul id="sc-gaps-list" class="space-y-2 text-xs text-slate-300 list-disc list-inside leading-relaxed">
+              <li>Could explicitly articulate cost estimations ($/month AWS egress for large replication).</li>
+              <li>Under high stress questions, could pause 3 seconds before responding to structure the answer.</li>
+              <li>In the behavioral scenario, provide more background on stakeholder dissent.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Sample Optimal Model Answer -->
+        <div class="p-6 rounded-xl border border-[#1e293b] bg-[#0a0f1d] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase tracking-wider text-indigo-400 font-bold">
+              Panelist Benchmark: Sample Optimal Response
+            </span>
+            <span class="text-[10px] font-mono text-slate-500">Staff Architect Gold Standard</span>
+          </div>
+          <div class="text-xs text-slate-300 leading-relaxed font-mono bg-slate-900/70 p-4 rounded-lg border border-slate-800">
+            <strong class="text-white">Q: "How do you handle cache stampedes during peak write invalidations?"</strong><br><br>
+            "To prevent cache stampedes, I implement mutual exclusion locking (e.g. Redis Redlock or a localized mutex) so only one worker re-computes the expensive database query while concurrent callers wait or receive a slightly stale response via a soft TTL. Furthermore, we apply randomized probabilistic early expiration (XFetch algorithm) across the key space to spread out cache evictions smoothly."
+          </div>
+        </div>
+
+        <!-- Document Sign-off Footer -->
+        <div class="pt-6 border-t border-[#1e293b] flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-500">
+          <div>
+            Evaluated by: <strong>InterviewStudio Multi-Agent Consensus</strong>
+          </div>
+          <div>
+            Integrity Hash: <strong>SHA256-INTV-2026-CONFIRMED</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- TOAST NOTIFICATIONS CONTAINER                                             -->
+  <!-- ========================================================================= -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-md pointer-events-none"></div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT STATE ENGINE, CHAT STREAM, TTS/STT & EVALUATOR                 -->
+  <!-- ========================================================================= -->
+  <script>
+    /**
+     * MULTI-PERSONA INTERVIEW KNOWLEDGE BASE & CURATED QUESTIONS
+     */
+    const PANEL_PERSONAS = {
+      sarah: {
+        id: 'sarah',
+        name: 'Sarah Lin',
+        title: 'VP of Engineering',
+        focus: 'Architecture & Scalability',
+        avatar: 'SL',
+        color: 'from-blue-600 to-indigo-600',
+        voiceRate: 0.98,
+        voicePitch: 1.05
+      },
+      marcus: {
+        id: 'marcus',
+        name: 'Marcus Vance',
+        title: 'Staff Systems Architect',
+        focus: 'Tradeoffs & Edge Cases',
+        avatar: 'MV',
+        color: 'from-emerald-600 to-teal-600',
+        voiceRate: 0.95,
+        voicePitch: 0.92
+      },
+      elena: {
+        id: 'elena',
+        name: 'Elena Rostova',
+        title: 'Head of People & Bar Raiser',
+        focus: 'STAR Behavioral & Culture',
+        avatar: 'ER',
+        color: 'from-purple-600 to-pink-600',
+        voiceRate: 1.0,
+        voicePitch: 1.1
+      }
+    };
+
+    // Role-specific initial curated questions
+    const ROLE_QUESTIONS = {
+      frontend: [
+        {
+          speaker: 'sarah',
+          text: "Welcome to the panel. Let's start with high-level architecture. When architecting a mission-critical web application serving millions of global users, how do you balance Core Web Vitals (INP, LCP) with dynamic client-side hydration overhead?",
+          round: "Round 1: Client Architecture & Web Vitals"
+        },
+        {
+          speaker: 'marcus',
+          text: "You mentioned your rendering strategy. Suppose your state management store receives 200 WebSocket event dispatches per second from a live financial ticker. How do you prevent thread starvation and unnecessary re-renders in the React/DOM reconciler?",
+          round: "Round 2: State Concurrency & Reconciliation"
+        },
+        {
+          speaker: 'elena',
+          text: "Tell me about a time you strongly disagreed with a product manager on shipping a heavy third-party script that would compromise performance for end users. How did you handle the situation and what was the outcome?",
+          round: "Round 3: Behavioral STAR & Stakeholder Alignment"
+        }
+      ],
+      backend: [
+        {
+          speaker: 'sarah',
+          text: "Welcome to our technical loop. Let's start with core architecture: We need to design a high-throughput payment ingestion service that must guarantee exactly-once processing even during database failovers. Walk me through your design.",
+          round: "Round 1: Distributed Transactions & Idempotency"
+        },
+        {
+          speaker: 'marcus',
+          text: "You mentioned caching with Redis and message queuing with Kafka. How do you handle cache stampedes during peak flash-sale spikes, and what is your consumer offset commit strategy under network partition?",
+          round: "Round 2: Concurrency & Failure Mitigation"
+        },
+        {
+          speaker: 'elena',
+          text: "Think back to a critical production outage or data inconsistency incident that you personally owned. Using the STAR format, describe the situation, your immediate response, how you communicated with executive stakeholders, and the preventative measures you instituted.",
+          round: "Round 3: Behavioral STAR & Post-Mortem Leadership"
+        }
+      ],
+      fullstack: [
+        {
+          speaker: 'sarah',
+          text: "Hello! As a full-stack engineer, how do you design end-to-end data contracts between complex distributed microservices and mobile/web clients to maintain backwards compatibility across rolling deployments?",
+          round: "Round 1: End-to-End Contract & API Design"
+        },
+        {
+          speaker: 'marcus',
+          text: "Suppose a database query backing your primary dashboard suddenly slows from 20ms to 4.2 seconds under 10x traffic. How do you systematically profile, isolate the bottleneck, and resolve it without downtime?",
+          round: "Round 2: Performance Profiling & Optimization"
+        },
+        {
+          speaker: 'elena',
+          text: "Describe a situation where you had to lead a major technical migration while the product team continued to push new feature requirements. How did you prioritize technical debt versus commercial deliverables?",
+          round: "Round 3: Technical Prioritization & Negotiation"
+        }
+      ],
+      aiml: [
+        {
+          speaker: 'sarah',
+          text: "Welcome to the AI panel. We are deploying an enterprise LLM retrieval-augmented generation (RAG) pipeline for 50,000 concurrent enterprise users. How do you structure the vector embedding, retrieval re-ranking, and context window pruning to guarantee sub-400ms latency?",
+          round: "Round 1: RAG Architecture & Latency Budgets"
+        },
+        {
+          speaker: 'marcus',
+          text: "How do you detect, monitor, and mitigate model drift and hallucinations in production? What evaluation metrics (faithfulness, answer relevancy, semantic drift) do you log into your observability pipeline?",
+          round: "Round 2: Evaluation Metrics & Guardrails"
+        },
+        {
+          speaker: 'elena',
+          text: "Tell me about a project where your initial AI model prototype failed to meet production accuracy standards. How did you communicate this to non-technical stakeholders and adapt your strategy?",
+          round: "Round 3: Resilience & Scientific Rigor"
+        }
+      ],
+      pm: [
+        {
+          speaker: 'sarah',
+          text: "Welcome. How do you define the product vision and quarterly engineering roadmap for an enterprise platform when engineering and commercial sales have conflicting priorities?",
+          round: "Round 1: Strategy & Tradeoff Prioritization"
+        },
+        {
+          speaker: 'marcus',
+          text: "An engineer tells you that building a critical customer request cleanly will take 3 months, but a quick hack can ship in 3 days with heavy technical debt. How do you evaluate and decide?",
+          round: "Round 2: Technical Debt vs Time-to-Market"
+        },
+        {
+          speaker: 'elena',
+          text: "Walk me through a time when a product launch failed to hit its North Star adoption metrics. What were the root causes, how did you analyze the data, and what course correction did you lead?",
+          round: "Round 3: Failure Recovery & Data-Driven Pivot"
+        }
+      ]
+    };
+
+    // Pre-loaded code challenges for code editor
+    const CODE_CHALLENGES = {
+      python: `# Python 3: In-Memory LRU Cache with O(1) Get/Put
+class Node:
+    def __init__(self, key, val):
+        self.key, self.val = key, val
+        self.prev = self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.cache = {} # key -> node
+        self.head, self.tail = Node(0, 0), Node(0, 0)
+        self.head.next, self.tail.prev = self.tail, self.head
+
+    def _remove(self, node):
+        prev, nxt = node.prev, node.next
+        prev.next, nxt.prev = nxt, prev
+
+    def _insert(self, node):
+        prev, nxt = self.tail.prev, self.tail
+        prev.next = node
+        node.prev, node.next = prev, nxt
+        nxt.prev = node
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            self._remove(self.cache[key])
+            self._insert(self.cache[key])
+            return self.cache[key].val
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self._remove(self.cache[key])
+        self.cache[key] = Node(key, value)
+        self._insert(self.cache[key])
+        if len(self.cache) > self.cap:
+            lru = self.head.next
+            self._remove(lru)
+            del self.cache[lru.key]
+
+# Test harness
+cache = LRUCache(2)
+cache.put(1, 1)
+cache.put(2, 2)
+print("Get 1:", cache.get(1)) # returns 1
+cache.put(3, 3)              # evicts key 2
+print("Get 2:", cache.get(2)) # returns -1 (not found)
+`,
+      javascript: `// JavaScript (ES6): Token Bucket Rate Limiter
+class TokenBucket {
+  constructor(capacity, refillRatePerSec) {
+    this.capacity = capacity;
+    this.refillRate = refillRatePerSec;
+    this.tokens = capacity;
+    this.lastRefill = Date.now();
+  }
+
+  allowRequest(tokensRequired = 1) {
+    this.refill();
+    if (this.tokens >= tokensRequired) {
+      this.tokens -= tokensRequired;
+      return true;
+    }
+    return false;
+  }
+
+  refill() {
+    const now = Date.now();
+    const elapsedSeconds = (now - this.lastRefill) / 1000;
+    this.tokens = Math.min(this.capacity, this.tokens + elapsedSeconds * this.refillRate);
+    this.lastRefill = now;
+  }
+}
+
+// Verification Test
+const limiter = new TokenBucket(5, 2);
+console.log("Request 1:", limiter.allowRequest()); // true
+console.log("Tokens Available:", limiter.tokens.toFixed(2));
+`,
+      java: `// Java 17: Concurrent Safe In-Memory Priority Queue
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class TaskDispatcher {
+    private final ConcurrentHashMap<String, Integer> taskMetrics = new ConcurrentHashMap<>();
+    private final AtomicInteger processedCount = new AtomicInteger(0);
+
+    public void recordTask(String taskId, int executionTimeMs) {
+        taskMetrics.put(taskId, executionTimeMs);
+        processedCount.incrementAndGet();
+    }
+
+    public static void main(String[] args) {
+        TaskDispatcher dispatcher = new TaskDispatcher();
+        dispatcher.recordTask("task-101", 42);
+        System.out.println("Processed tasks: " + dispatcher.processedCount.get());
+    }
+}
+`,
+      sql: `-- PostgreSQL: Optimized High-Volume Event Aggregations
+EXPLAIN ANALYZE
+WITH hourly_metrics AS (
+    SELECT 
+        date_trunc('hour', created_at) AS event_hour,
+        service_id,
+        count(*) AS total_calls,
+        percentile_cont(0.99) WITHIN GROUP (ORDER BY duration_ms) AS p99_latency
+    FROM api_telemetry_events
+    WHERE created_at >= NOW() - INTERVAL '24 hours'
+    GROUP BY 1, 2
+)
+SELECT * FROM hourly_metrics 
+ORDER BY p99_latency DESC
+LIMIT 50;
+`
+    };
+
+    /**
+     * REACTIVE APPLICATION STATE
+     */
+    const state = {
+      stage: 'setup', // 'setup' | 'studio' | 'scorecard'
+      candidateName: 'Alex Morgan',
+      roleKey: 'frontend',
+      roleTitle: 'Frontend Engineer',
+      seniority: 'Mid-Level (3-5 yrs)',
+      focus: 'Comprehensive Panel',
+      ttsEnabled: true,
+      sttEnabled: true,
+      contextSnippet: '',
+      timerSeconds: 0,
+      timerInterval: null,
+      activeSpeaker: 'sarah',
+      currentExchangeIndex: 0,
+      dialogueHistory: [],
+      isRecordingVoice: false,
+      speechRecognition: null,
+      evaluatedScore: 88
+    };
+
+    /**
+     * INITIALIZATION & EVENT SETUP
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set initial code challenge
+      document.getElementById('live-code-editor').value = CODE_CHALLENGES.python;
+
+      // Enter key (Ctrl+Enter) in candidate response
+      document.getElementById('candidate-response-input').addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          submitCandidateResponse();
+        }
+      });
+
+      // Initialize Web Speech Recognition if available
+      initSpeechRecognition();
+
+      lucide.createIcons();
+    });
+
+    /**
+     * STAGE 1 LOGIC: CONFIGURATION & SETUP
+     */
+    function selectRolePreset(roleKey) {
+      state.roleKey = roleKey;
+      const customInput = document.getElementById('cfg-custom-role');
+      
+      const roleTitles = {
+        frontend: 'Frontend Engineer',
+        backend: 'Backend / Distributed Systems',
+        fullstack: 'Full-Stack Engineer',
+        aiml: 'AI / ML Engineer',
+        pm: 'Product Manager',
+        custom: 'Custom Role'
+      };
+
+      state.roleTitle = roleTitles[roleKey] || 'Software Engineer';
+
+      if (roleKey === 'custom') {
+        customInput.classList.remove('hidden');
+        customInput.focus();
+      } else {
+        customInput.classList.add('hidden');
+      }
+
+      // Update styling of buttons
+      const buttons = document.querySelectorAll('.role-preset-btn');
+      buttons.forEach(btn => {
+        btn.className = 'role-preset-btn p-4 rounded-xl border border-[#1e293b] bg-slate-900 text-left hover:border-slate-700 transition cursor-pointer';
+      });
+
+      const selectedBtn = event.currentTarget;
+      if (selectedBtn) {
+        selectedBtn.className = 'role-preset-btn p-4 rounded-xl border border-indigo-600 bg-indigo-950/30 text-left transition cursor-pointer';
+      }
+    }
+
+    function selectSeniority(level) {
+      state.seniority = level;
+      const btns = document.querySelectorAll('.seniority-btn');
+      btns.forEach(b => {
+        b.className = 'seniority-btn py-3 px-2 rounded-xl border border-[#1e293b] bg-slate-900 hover:border-slate-700 text-center font-bold text-slate-300 transition cursor-pointer';
+      });
+      event.currentTarget.className = 'seniority-btn py-3 px-2 rounded-xl border border-indigo-600 bg-indigo-950/30 text-center font-bold text-white transition cursor-pointer';
+    }
+
+    function selectFocus(focus) {
+      state.focus = focus;
+      const btns = document.querySelectorAll('.focus-btn');
+      btns.forEach(b => {
+        b.className = 'focus-btn py-3 px-2 rounded-xl border border-[#1e293b] bg-slate-900 hover:border-slate-700 text-center font-bold text-slate-300 transition cursor-pointer';
+      });
+      event.currentTarget.className = 'focus-btn py-3 px-2 rounded-xl border border-indigo-600 bg-indigo-950/30 text-center font-bold text-white transition cursor-pointer';
+    }
+
+    function loadSampleContext() {
+      selectRolePreset('backend');
+      state.seniority = 'Senior / Lead (6+ yrs)';
+      document.getElementById('cfg-context').value = `Target Role: Staff Infrastructure & Distributed Systems Engineer
+Key Requirements:
+- Design multi-region microservices handling 50k+ writes/sec with strict idempotency.
+- Deep expertise in Redis caching tiers, Kafka event streaming, and PostgreSQL replication.
+- Track record of leading technical post-mortems and coaching senior engineers.`;
+      showToast("Context Loaded", "Injected Senior Backend & Distributed Systems benchmark context.");
+    }
+
+    /**
+     * TRANSITION TO STAGE 2: LIVE STUDIO
+     */
+    function startInterviewStudio() {
+      const nameInput = document.getElementById('cfg-candidate-name').value.trim();
+      state.candidateName = nameInput || 'Alex Morgan';
+
+      if (state.roleKey === 'custom') {
+        const customTitle = document.getElementById('cfg-custom-role').value.trim();
+        state.roleTitle = customTitle || 'Staff Software Engineer';
+      }
+
+      state.ttsEnabled = document.getElementById('cfg-tts-enabled').checked;
+      state.sttEnabled = document.getElementById('cfg-stt-enabled').checked;
+      state.contextSnippet = document.getElementById('cfg-context').value.trim();
+
+      // Update UI elements in Studio
+      document.getElementById('studio-role-title').innerText = state.roleTitle;
+      document.getElementById('studio-candidate-name').innerText = state.candidateName;
+      document.getElementById('studio-level-badge').innerText = state.seniority;
+      document.getElementById('studio-focus-text').innerText = state.focus;
+
+      // Update Stage Navigation Pills
+      setStagePill(2);
+
+      // Hide Setup, Show Studio
+      document.getElementById('setup-stage').classList.add('hidden');
+      document.getElementById('studio-stage').classList.remove('hidden');
+      document.getElementById('scorecard-stage').classList.add('hidden');
+
+      // Start Timer
+      startStudioTimer();
+
+      // Seed Initial Question
+      seedInitialInterviewQuestion();
+
+      lucide.createIcons();
+    }
+
+    function setStagePill(stageNum) {
+      const p1 = document.getElementById('step-pill-1');
+      const p2 = document.getElementById('step-pill-2');
+      const p3 = document.getElementById('step-pill-3');
+
+      const activeClass = 'px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-bold transition-all duration-200';
+      const inactiveClass = 'px-3 py-1.5 rounded-lg text-slate-400 font-medium transition-all duration-200';
+
+      p1.className = stageNum === 1 ? activeClass : inactiveClass;
+      p2.className = stageNum === 2 ? activeClass : inactiveClass;
+      p3.className = stageNum === 3 ? activeClass : inactiveClass;
+    }
+
+    function startStudioTimer() {
+      state.timerSeconds = 0;
+      if (state.timerInterval) clearInterval(state.timerInterval);
+      state.timerInterval = setInterval(() => {
+        state.timerSeconds++;
+        const mins = String(Math.floor(state.timerSeconds / 60)).padStart(2, '0');
+        const secs = String(state.timerSeconds % 60).padStart(2, '0');
+        const timerEl = document.getElementById('studio-timer');
+        if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    /**
+     * STAGE 2: DIALOGUE ENGINE & ADAPTIVE FOLLOW-UPS
+     */
+    function seedInitialInterviewQuestion() {
+      const questionsList = ROLE_QUESTIONS[state.roleKey] || ROLE_QUESTIONS['backend'];
+      const initialQ = questionsList[0];
+
+      state.dialogueHistory = [];
+      state.currentExchangeIndex = 0;
+      state.activeSpeaker = initialQ.speaker;
+
+      appendPanelQuestion(initialQ.speaker, initialQ.text, initialQ.round);
+    }
+
+    function setActiveSpeakerBadge(speakerId) {
+      state.activeSpeaker = speakerId;
+      ['sarah', 'marcus', 'elena'].forEach(id => {
+        const card = document.getElementById(`card-panelist-${id}`);
+        const badge = document.getElementById(`badge-speaker-${id}`);
+
+        if (id === speakerId) {
+          card.className = 'panelist-card p-5 rounded-2xl border border-indigo-500 bg-indigo-950/20 space-y-3 transition-all duration-300 shadow-md shadow-indigo-950/50';
+          badge.className = 'speaker-badge px-2 py-0.5 rounded-md text-[10px] font-mono bg-indigo-900 text-indigo-200 border border-indigo-600 flex items-center gap-1 font-bold animate-pulse';
+          badge.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-indigo-400"></span> Speaking now...`;
+        } else {
+          card.className = 'panelist-card p-5 rounded-2xl border border-[#1e293b] bg-slate-900/40 space-y-3 transition-all duration-300';
+          badge.className = 'speaker-badge px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700';
+          badge.innerText = 'Listening';
+        }
+      });
+    }
+
+    function appendPanelQuestion(speakerId, questionText, roundTitle) {
+      setActiveSpeakerBadge(speakerId);
+      const persona = PANEL_PERSONAS[speakerId] || PANEL_PERSONAS.sarah;
+
+      const feed = document.getElementById('dialogue-feed');
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const msgCard = document.createElement('div');
+      msgCard.className = 'p-5 rounded-2xl border border-[#1e293b] bg-slate-900/60 space-y-3 transition-all shadow-sm';
+      msgCard.innerHTML = `
+        <div class="flex items-center justify-between text-xs font-mono">
+          <div class="flex items-center gap-2.5">
+            <div class="h-7 w-7 rounded-lg bg-gradient-to-tr ${persona.color} flex items-center justify-center font-bold text-white text-xs">
+              ${persona.avatar}
+            </div>
+            <div>
+              <span class="font-bold text-white">${persona.name}</span>
+              <span class="text-slate-500 text-[11px]">&bull; ${persona.title}</span>
+            </div>
+          </div>
+          <span class="text-slate-500 text-[11px]">${timeStr}</span>
+        </div>
+
+        <div class="px-2.5 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-indigo-300 border border-slate-700 inline-block">
+          ${roundTitle || 'Live Interview Inquiry'}
+        </div>
+
+        <p class="text-xs text-slate-200 leading-relaxed font-sans text-[13px]">
+          ${questionText}
+        </p>
+      `;
+
+      feed.appendChild(msgCard);
+      feed.scrollTop = feed.scrollHeight;
+
+      // Speak question via Text-To-Speech if enabled
+      if (state.ttsEnabled) {
+        speakTextWithTTS(questionText, persona);
+      }
+
+      state.dialogueHistory.push({
+        sender: persona.name,
+        role: 'panelist',
+        speakerId: speakerId,
+        text: questionText
+      });
+
+      // Update exchange counter
+      document.getElementById('exchange-counter').innerText = `Exchange ${state.dialogueHistory.filter(d => d.role === 'candidate').length + 1} / 6`;
+    }
+
+    function submitCandidateResponse() {
+      const input = document.getElementById('candidate-response-input');
+      const text = input.value.trim();
+
+      if (!text) {
+        showToast("Empty Response", "Please articulate an answer before submitting.");
+        return;
+      }
+
+      input.value = '';
+
+      // Append Candidate Response to dialogue feed
+      const feed = document.getElementById('dialogue-feed');
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const candCard = document.createElement('div');
+      candCard.className = 'p-5 rounded-2xl border border-indigo-900/60 bg-indigo-950/20 space-y-2.5 transition-all shadow-sm';
+      candCard.innerHTML = `
+        <div class="flex items-center justify-between text-xs font-mono">
+          <div class="flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-indigo-400"></span>
+            <span class="font-bold text-indigo-300">${state.candidateName} (Candidate Response)</span>
+          </div>
+          <span class="text-slate-500 text-[11px]">${timeStr}</span>
+        </div>
+        <p class="text-xs text-slate-200 leading-relaxed font-sans text-[13px] whitespace-pre-wrap">${text}</p>
+      `;
+
+      feed.appendChild(candCard);
+      feed.scrollTop = feed.scrollHeight;
+
+      state.dialogueHistory.push({
+        sender: state.candidateName,
+        role: 'candidate',
+        text: text
+      });
+
+      // Generate Adaptive Follow-Up Question
+      triggerAdaptiveFollowUp(text);
+    }
+
+    /**
+     * REAL-TIME ADAPTIVE FOLLOW-UP GENERATOR
+     */
+    function triggerAdaptiveFollowUp(candidateAnswer) {
+      // Simulate brief thinking latency
+      const feed = document.getElementById('dialogue-feed');
+      const typingIndicator = document.createElement('div');
+      typingIndicator.id = 'typing-indicator';
+      typingIndicator.className = 'p-3 rounded-xl bg-slate-900 border border-[#1e293b] text-slate-400 text-xs font-mono flex items-center gap-2';
+      typingIndicator.innerHTML = `
+        <span class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+        </span>
+        <span>Panelist is analyzing response nuances and preparing a targeted follow-up...</span>
+      `;
+      feed.appendChild(typingIndicator);
+      feed.scrollTop = feed.scrollHeight;
+
+      setTimeout(() => {
+        const ind = document.getElementById('typing-indicator');
+        if (ind) ind.remove();
+
+        const exchangeCount = state.dialogueHistory.filter(d => d.role === 'candidate').length;
+        const lower = candidateAnswer.toLowerCase();
+
+        let nextSpeaker = 'marcus';
+        let followUpText = '';
+        let roundTitle = '';
+
+        // Dynamic Heuristic Evaluation based on content
+        if (exchangeCount === 1) {
+          nextSpeaker = 'marcus';
+          roundTitle = 'Round 2: Algorithmic Depth & Edge Cases';
+
+          if (lower.includes('cache') || lower.includes('redis') || lower.includes('memcached')) {
+            followUpText = `You highlighted Redis caching in your design. At scale, how do you handle cache stampedes and thundering herd problems when an essential key expires under 30,000 requests/sec? Walk me through your invalidation and lock strategy.`;
+          } else if (lower.includes('database') || lower.includes('sql') || lower.includes('shard')) {
+            followUpText = `You discussed the relational data layer. When scaling past a single master with read replicas, how do you ensure replication lag does not cause stale read-your-own-writes inconsistencies for active user sessions?`;
+          } else if (lower.includes('queue') || lower.includes('kafka') || lower.includes('event')) {
+            followUpText = `You mentioned event-driven queues with Kafka. In a distributed topology, how do you handle poisoned pills, consumer rebalancing timeouts, and dead-letter queue re-processing without breaking message order?`;
+          } else {
+            followUpText = `That provides a solid foundation. Let's look closer at system failure modes: If network partitions split your cluster in two, how does your architecture guarantee consistency versus availability, and what client degradation do you accept?`;
+          }
+
+        } else if (exchangeCount === 2) {
+          nextSpeaker = 'elena';
+          roundTitle = 'Round 3: Leadership, STAR Rigor & Culture Add';
+
+          if (lower.includes('team') || lower.includes('disagree') || lower.includes('stakeholder')) {
+            followUpText = `In your past experience, describe a high-stakes scenario where senior leadership pushed for a deadline that you knew was technically unrealistic. How did you structure your conversation, what data did you present, and what was the negotiated outcome?`;
+          } else {
+            followUpText = `Using the STAR framework, tell Elena about an engineering project where you experienced a significant failure or unexpected regression in production. What was the exact situation, the actions you spearheaded, and the concrete metrics of recovery?`;
+          }
+
+        } else if (exchangeCount === 3) {
+          nextSpeaker = 'sarah';
+          roundTitle = 'Round 4: Executive Synthesis & Tradeoff Evaluation';
+          followUpText = `Let's wrap up with an architectural tradeoff decision. If you had to build this system with 50% less cloud infrastructure budget, where would you make architectural compromises, and which non-functional requirements would you protect at all costs?`;
+
+        } else {
+          // Wrap up interview automatically
+          concludeAndScore();
+          return;
+        }
+
+        appendPanelQuestion(nextSpeaker, followUpText, roundTitle);
+
+      }, 1000);
+    }
+
+    /**
+     * PROMPT HELPER AIDS
+     */
+    function insertQuickPrompt(type) {
+      const input = document.getElementById('candidate-response-input');
+      if (type === 'star') {
+        input.value = `Situation: At my previous company, we faced...\nTask: My responsibility was to architect and deliver...\nAction: I evaluated alternatives and implemented...\nResult: This reduced latency by 45% and prevented downtime during Black Friday.`;
+      } else if (type === 'tradeoff') {
+        input.value += `\nRegarding trade-offs, we prioritized throughput over absolute immediate consistency by accepting eventual consistency across read replicas.`;
+      } else if (type === 'metric') {
+        input.value += `\nThe quantifiable business outcome was a reduction in p99 API response times from 340ms to 42ms, generating a 12% improvement in user checkout conversion.`;
+      }
+      input.focus();
+    }
+
+    /**
+     * CODE WORKSPACE EXECUTION & SYNTAX
+     */
+    function changeCodeLanguage(lang) {
+      const editor = document.getElementById('live-code-editor');
+      const taskLabel = document.getElementById('code-task-name');
+
+      if (CODE_CHALLENGES[lang]) {
+        editor.value = CODE_CHALLENGES[lang];
+      }
+
+      const tasks = {
+        python: 'Technical Task: LRU Cache Implementation with O(1) Ops',
+        javascript: 'Technical Task: Token Bucket Rate Limiter Algorithm',
+        java: 'Technical Task: Concurrent Safe In-Memory Priority Queue',
+        sql: 'Technical Task: PostgreSQL Index & Aggregation Optimization'
+      };
+
+      taskLabel.innerText = tasks[lang] || 'Live Technical Coding Challenge';
+    }
+
+    function executeCodeSnippet() {
+      const terminal = document.getElementById('code-terminal');
+      const lang = document.getElementById('code-language').value;
+
+      terminal.innerHTML = `<span class="text-cyan-400">[*] Compiling and executing test harness in sandbox (${lang})...</span>\n`;
+
+      setTimeout(() => {
+        const outputs = {
+          python: `[✓] Test 1: LRUCache(2) capacity boundary initialized.\n[✓] Test 2: cache.get(1) returned 1 (Cache Hit - 0.04ms).\n[✓] Test 3: Evicted key 2 after capacity exceeded.\n[✓] Test 4: cache.get(2) returned -1 (Verified O(1) LRU eviction).\n\n>>> PASS: 4/4 assertions satisfied. Execution time: 14ms. Memory: 12.4 MB.`,
+          javascript: `[✓] TokenBucket(5, 2 tokens/sec) instantiated.\n[✓] Allowed burst of 5 sequential requests.\n[✓] Rate limited 6th request with HTTP 429 status code.\n[✓] Verified linear token refill after 1000ms.\n\n>>> PASS: Rate limiter logic verified. Zero drift detected.`,
+          java: `[✓] Initialized ConcurrentHashMap with atomic thread-safe counters.\n[✓] 10,000 concurrent producer threads executed without race conditions.\n[✓] Verified memory fence & volatile read correctness.\n\n>>> BUILD SUCCESS: Total execution time: 0.182s`,
+          sql: `QUERY PLAN:\n-> Limit (cost=142.10..142.22 rows=50 width=48) (actual time=3.412..3.428 rows=50 loops=1)\n   -> Sort (cost=142.10..142.35 rows=100 width=48)\n      Sort Key: p99_latency DESC\n      -> Aggregate over indexed created_at timestamp\n\n>>> Execution Time: 3.84 ms (Index Scan Verified).`
+        };
+
+        terminal.innerHTML = outputs[lang] || `[✓] Code executed successfully. All edge tests passed.`;
+      }, 500);
+    }
+
+    function attachCodeToAnswer() {
+      const code = document.getElementById('live-code-editor').value;
+      const input = document.getElementById('candidate-response-input');
+      input.value += `\n\`\`\`\n${code}\n\`\`\`\n`;
+      input.focus();
+      showToast("Code Attached", "Embedded code block directly into your interview response.");
+    }
+
+    /**
+     * SPEECH-TO-TEXT (STT) & TEXT-TO-SPEECH (TTS)
+     */
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        console.warn("Web Speech Recognition API not natively supported in this browser.");
+        return;
+      }
+
+      state.speechRecognition = new SpeechRecognition();
+      state.speechRecognition.continuous = true;
+      state.speechRecognition.interimResults = true;
+      state.speechRecognition.lang = 'en-US';
+
+      state.speechRecognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          transcript += event.results[i][0].transcript;
+        }
+        const input = document.getElementById('candidate-response-input');
+        input.value = transcript;
+      };
+
+      state.speechRecognition.onerror = (e) => {
+        console.error("Speech recognition error:", e);
+        stopSpeechRecording();
+      };
+
+      state.speechRecognition.onend = () => {
+        stopSpeechRecording();
+      };
+    }
+
+    function toggleSpeechRecording() {
+      if (!state.speechRecognition) {
+        showToast("Speech Not Supported", "Browser Speech Recognition not active. Please use keyboard text entry.");
+        return;
+      }
+
+      if (state.isRecordingVoice) {
+        state.speechRecognition.stop();
+        stopSpeechRecording();
+      } else {
+        try {
+          state.speechRecognition.start();
+          state.isRecordingVoice = true;
+          document.getElementById('voice-indicator-bar').classList.remove('hidden');
+          document.getElementById('voice-indicator-bar').classList.add('flex');
+          document.getElementById('btn-mic-toggle').className = 'p-2.5 rounded-lg bg-rose-600 text-white transition cursor-pointer animate-pulse';
+        } catch (err) {
+          console.error("Mic start error:", err);
+        }
+      }
+    }
+
+    function stopSpeechRecording() {
+      state.isRecordingVoice = false;
+      document.getElementById('voice-indicator-bar').classList.add('hidden');
+      document.getElementById('voice-indicator-bar').classList.remove('flex');
+      document.getElementById('btn-mic-toggle').className = 'p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer';
+    }
+
+    function speakTextWithTTS(text, persona) {
+      if (!window.speechSynthesis) return;
+
+      // Cancel previous speech if running
+      window.speechSynthesis.cancel();
+
+      const cleanText = text.replace(/<[^>]*>?/gm, '');
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.rate = persona.voiceRate || 1.0;
+      utterance.pitch = persona.voicePitch || 1.0;
+
+      // Select natural voice if available
+      const voices = window.speechSynthesis.getVoices();
+      if (voices && voices.length > 0) {
+        const engVoices = voices.filter(v => v.lang.startsWith('en'));
+        if (engVoices.length > 0) {
+          utterance.voice = engVoices[persona.id === 'elena' ? 1 % engVoices.length : 0];
+        }
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    /**
+     * STAGE 3: POST-INTERVIEW DIAGNOSTIC SCORECARD
+     */
+    function concludeAndScore() {
+      if (state.timerInterval) clearInterval(state.timerInterval);
+
+      // Stop any speech
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      stopSpeechRecording();
+
+      // Calculate score dynamically based on exchanges and depth
+      const candAnswers = state.dialogueHistory.filter(d => d.role === 'candidate');
+      const totalWords = candAnswers.reduce((sum, a) => sum + a.text.split(' ').length, 0);
+
+      let overallScore = 88;
+      let stScore = '9.0 / 10';
+      let actScore = '8.5 / 10';
+      let resScore = '8.2 / 10';
+      let techPct = 90;
+      let commPct = 86;
+      let psPct = 88;
+      let scalePct = 84;
+
+      if (candAnswers.length >= 3 && totalWords > 120) {
+        overallScore = 92;
+        stScore = '9.5 / 10';
+        actScore = '9.0 / 10';
+        resScore = '8.8 / 10';
+        techPct = 94;
+        commPct = 91;
+        psPct = 92;
+        scalePct = 90;
+      }
+
+      // Update Scorecard Values
+      document.getElementById('sc-candidate-name').innerText = state.candidateName;
+      document.getElementById('sc-role-badge').innerText = state.roleTitle;
+      document.getElementById('sc-seniority-badge').innerText = state.seniority;
+      document.getElementById('sc-date-text').innerText = new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      document.getElementById('sc-score-st').innerText = stScore;
+      document.getElementById('sc-score-action').innerText = actScore;
+      document.getElementById('sc-score-result').innerText = resScore;
+
+      document.getElementById('bar-val-tech').innerText = `${techPct}%`;
+      document.getElementById('bar-fill-tech').style.width = `${techPct}%`;
+
+      document.getElementById('bar-val-comm').innerText = `${commPct}%`;
+      document.getElementById('bar-fill-comm').style.width = `${commPct}%`;
+
+      document.getElementById('bar-val-ps').innerText = `${psPct}%`;
+      document.getElementById('bar-fill-ps').style.width = `${psPct}%`;
+
+      document.getElementById('bar-val-scale').innerText = `${scalePct}%`;
+      document.getElementById('bar-fill-scale').style.width = `${scalePct}%`;
+
+      document.getElementById('sc-recommendation-pill').innerHTML = `
+        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+        <span>Strong Hire (${overallScore}/100)</span>
+      `;
+
+      // Update Nav Pills
+      setStagePill(3);
+
+      // Hide Studio, Show Scorecard
+      document.getElementById('setup-stage').classList.add('hidden');
+      document.getElementById('studio-stage').classList.add('hidden');
+      document.getElementById('scorecard-stage').classList.remove('hidden');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    function resetToSetup() {
+      if (state.timerInterval) clearInterval(state.timerInterval);
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      stopSpeechRecording();
+
+      setStagePill(1);
+      document.getElementById('setup-stage').classList.remove('hidden');
+      document.getElementById('studio-stage').classList.add('hidden');
+      document.getElementById('scorecard-stage').classList.add('hidden');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    /**
+     * CLEAN TOAST NOTIFICATIONS
+     */
+    function showToast(title, message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto p-4 rounded-2xl bg-slate-900 border border-indigo-500/80 shadow-2xl flex items-start gap-3 transition-all duration-300 transform translate-y-2 opacity-0 text-xs';
+      toast.innerHTML = `
+        <div class="p-1.5 rounded-lg bg-indigo-950 text-indigo-400 border border-indigo-700/60 shrink-0">
+          <i data-lucide="info" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1">
+          <h5 class="font-bold text-white text-xs">${title}</h5>
+          <p class="text-slate-400 text-[11px] mt-0.5 leading-relaxed">${message}</p>
+        </div>
+      `;
+
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 20);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
